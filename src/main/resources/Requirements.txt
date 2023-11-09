@@ -15,7 +15,7 @@
 7. Todos os endpoints das APIs deverão ter logs úteis e todos os serviços deverão 
    gerar pelo menos métricas de acesso aos endpoints
 
-8. Serviço de upload de imagens
+8. Serviço de upload de imagens - ok
 
 <!-- Opcionais -->
    

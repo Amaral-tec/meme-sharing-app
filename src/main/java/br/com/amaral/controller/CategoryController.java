@@ -80,21 +80,21 @@ public class CategoryController {
 	}
 	
 	@ResponseBody
-	@GetMapping(value = "**/find-all-category")
+	@GetMapping(value = "**/find-all-categories")
 	public ResponseEntity<List<Category>> findAllCategory() {
 
-		List<Category> category = categoryRepository.findAll();
+		List<Category> list = categoryRepository.findAll();
 
-		return new ResponseEntity<>(category, HttpStatus.OK);
+		return new ResponseEntity<>(list, HttpStatus.OK);
 	}
 
 	@ResponseBody
 	@GetMapping(value = "**/find-category-by-name/{name}")
 	public ResponseEntity<List<Category>> findCategoryByName(@PathVariable("name") String name) {
 
-		List<Category> categories = categoryRepository.findCategoryByName(name.toUpperCase());
+		List<Category> list = categoryRepository.findCategoryByName(name.toUpperCase());
 
-		return new ResponseEntity<>(categories, HttpStatus.OK);
+		return new ResponseEntity<>(list, HttpStatus.OK);
 	}
 
 }

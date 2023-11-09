@@ -1,6 +1,7 @@
 package br.com.amaral.controller;
 
 import java.util.Date;
+import java.util.List;
 
 import javax.validation.Valid;
 
@@ -89,6 +90,15 @@ public class UserController {
 		User user = userRepository.getUserByLogin(login);
 
 		return new ResponseEntity<>(user, HttpStatus.OK);
+	}
+	
+	@ResponseBody
+	@GetMapping(value = "**/find-all-users")
+	public ResponseEntity<List<User>> findAllUsers() {
+
+		List<User> list = userRepository.findAll();
+
+		return new ResponseEntity<>(list, HttpStatus.OK);
 	}
 
 }
