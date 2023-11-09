@@ -1,18 +1,23 @@
 package br.com.amaral.model;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.Objects;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.ConstraintMode;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.ForeignKey;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
@@ -21,19 +26,30 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
 @Entity
-@Table(name = "categories")
-@SequenceGenerator(name = "seq_category", sequenceName = "seq_category", allocationSize = 1, initialValue = 1)
-public class Category implements Serializable {
+@Table(name = "memes")
+@SequenceGenerator(name = "seq_meme", sequenceName = "seq_meme", allocationSize = 1, initialValue = 1)
+public class Meme implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seq_category")
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seq_meme")
 	private Long id;
 
 	@NotBlank
 	@Column(nullable = false)
 	private String name;
+	
+	@NotBlank
+	@Column(nullable = false)
+	private String description;
+	
+	@NotBlank
+	@Column(nullable = false)
+	private String url;
+	
+	@OneToMany(mappedBy = "meme", orphanRemoval = true, cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	private List<Image> images = new ArrayList<>();
 	
 	@NotNull
 	@Column(name = "created_at", nullable = false)
@@ -46,6 +62,10 @@ public class Category implements Serializable {
 	@ManyToOne(targetEntity = User.class)
 	@JoinColumn(name = "user_id", nullable = false, foreignKey = @ForeignKey(value = ConstraintMode.CONSTRAINT, name = "user_fk"))
 	private User user;
+	
+	@ManyToOne(targetEntity = Category.class)
+	@JoinColumn(name = "category_id", nullable = false, foreignKey = @ForeignKey(value = ConstraintMode.CONSTRAINT, name = "category_fk"))
+	private Category category;
 
 	public Long getId() {
 		return id;
@@ -61,6 +81,30 @@ public class Category implements Serializable {
 
 	public void setName(String name) {
 		this.name = name;
+	}
+
+	public String getDescription() {
+		return description;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
+	}
+
+	public String getUrl() {
+		return url;
+	}
+
+	public void setUrl(String url) {
+		this.url = url;
+	}
+
+	public List<Image> getImages() {
+		return images;
+	}
+
+	public void setImages(List<Image> images) {
+		this.images = images;
 	}
 
 	public Date getCreatedAt() {
@@ -87,6 +131,14 @@ public class Category implements Serializable {
 		this.user = user;
 	}
 
+	public Category getCategory() {
+		return category;
+	}
+
+	public void setCategory(Category category) {
+		this.category = category;
+	}
+
 	@Override
 	public int hashCode() {
 		return Objects.hash(id);
@@ -100,7 +152,7 @@ public class Category implements Serializable {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		Category other = (Category) obj;
+		Meme other = (Meme) obj;
 		return Objects.equals(id, other.id);
 	}
 

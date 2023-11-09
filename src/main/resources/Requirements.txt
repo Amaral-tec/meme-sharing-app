@@ -1,0 +1,24 @@
+<!-- Obrigatórios -->
+
+1. Cadastro de usuários para envio de memes - ok
+
+2. Cadastro de categorias de memes - ok
+
+3. Cadastro de memes (nome, descrição, URL da imagem ou vídeo e data do cadastro) - ok
+
+4. Memes precisam necessariamente ter uma categoria - ok
+
+5. Funcionalidade de "Meme do dia" (um meme da base é retornado randomicamente)
+
+6. Melhorar a parte de observabilidade (Logs, métricas, etc)
+
+7. Todos os endpoints das APIs deverão ter logs úteis e todos os serviços deverão 
+   gerar pelo menos métricas de acesso aos endpoints
+
+8. Serviço de upload de imagens
+
+<!-- Opcionais -->
+   
+1. Consistência forte ou eventual
+
+2. Balanceadores de carga e registro de serviços

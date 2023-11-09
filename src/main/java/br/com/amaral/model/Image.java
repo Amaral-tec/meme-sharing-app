@@ -1,7 +1,6 @@
 package br.com.amaral.model;
 
 import java.io.Serializable;
-import java.util.Date;
 import java.util.Objects;
 
 import javax.persistence.Column;
@@ -15,37 +14,37 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
 import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
-@Table(name = "categories")
-@SequenceGenerator(name = "seq_category", sequenceName = "seq_category", allocationSize = 1, initialValue = 1)
-public class Category implements Serializable {
+@Table(name = "images")
+@SequenceGenerator(name = "seq_image", sequenceName = "seq_image", allocationSize = 1, initialValue = 1)
+public class Image implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seq_category")
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seq_image")
 	private Long id;
 
 	@NotBlank
-	@Column(nullable = false)
-	private String name;
-	
-	@NotNull
-	@Column(name = "created_at", nullable = false)
-	@Temporal(TemporalType.DATE)
-	private Date createdAt;
+	@Column(name = "original_image", nullable = false, columnDefinition = "text")
+	private String originalImage;
 
+	@NotBlank
+	@Column(name = "thumbnail_image", nullable = false, columnDefinition = "text")
+	private String thumbnailImage;
+	
 	@Column(name = "is_deleted")
 	private Boolean isDeleted = Boolean.FALSE;
-
-	@ManyToOne(targetEntity = User.class)
-	@JoinColumn(name = "user_id", nullable = false, foreignKey = @ForeignKey(value = ConstraintMode.CONSTRAINT, name = "user_fk"))
-	private User user;
+	
+	@JsonIgnore
+	@ManyToOne
+	@JoinColumn(name = "meme_id", nullable = false,
+	foreignKey = @ForeignKey(value = ConstraintMode.CONSTRAINT, name = "meme_fk"))
+	private Meme meme;
 
 	public Long getId() {
 		return id;
@@ -55,20 +54,20 @@ public class Category implements Serializable {
 		this.id = id;
 	}
 
-	public String getName() {
-		return name;
+	public String getOriginalImage() {
+		return originalImage;
 	}
 
-	public void setName(String name) {
-		this.name = name;
+	public void setOriginalImage(String originalImage) {
+		this.originalImage = originalImage;
 	}
 
-	public Date getCreatedAt() {
-		return createdAt;
+	public String getThumbnailImage() {
+		return thumbnailImage;
 	}
 
-	public void setCreatedAt(Date createdAt) {
-		this.createdAt = createdAt;
+	public void setThumbnailImage(String thumbnailImage) {
+		this.thumbnailImage = thumbnailImage;
 	}
 
 	public Boolean getIsDeleted() {
@@ -79,12 +78,12 @@ public class Category implements Serializable {
 		this.isDeleted = isDeleted;
 	}
 
-	public User getUser() {
-		return user;
+	public Meme getMeme() {
+		return meme;
 	}
 
-	public void setUser(User user) {
-		this.user = user;
+	public void setMeme(Meme meme) {
+		this.meme = meme;
 	}
 
 	@Override
@@ -100,7 +99,7 @@ public class Category implements Serializable {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		Category other = (Category) obj;
+		Image other = (Image) obj;
 		return Objects.equals(id, other.id);
 	}
 
