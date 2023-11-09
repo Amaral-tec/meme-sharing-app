@@ -12,7 +12,7 @@ import br.com.amaral.model.User;
 @Transactional
 public interface IUserRepository extends JpaRepository<User, Long> {
 	
-	@Query(nativeQuery = true, value = "SELECT COUNT(1) > 0 FROM useres WHERE UPPER(TRIM(login)) = UPPER(TRIM(?1))")
+	@Query(nativeQuery = true, value = "SELECT COUNT(1) > 0 FROM users WHERE UPPER(TRIM(login)) = UPPER(TRIM(?1))")
 	public boolean isUserRegistered(String login);
 	
 	@Query(value = "SELECT a FROM User a WHERE a.login = ?1")
@@ -21,11 +21,11 @@ public interface IUserRepository extends JpaRepository<User, Long> {
 	@Query(value = "SELECT a FROM User a WHERE a.passwordCreatedAt <= current_date - 90")
 	List<User> userPasswordExpired();
 
-	@Query(nativeQuery = true, value = "SELECT constraint_name FROM information_schema.constraint_column_usage WHERE table_name = 'useres_accesses' AND column_name = 'access_id' AND constraint_name <> 'unique_access_user';")
+	@Query(nativeQuery = true, value = "SELECT constraint_name FROM information_schema.constraint_column_usage WHERE table_name = 'users_accesses' AND column_name = 'access_id' AND constraint_name <> 'unique_access_user';")
 	String constraintAccessGet();
 
 	@Transactional
 	@Modifying
-	@Query(nativeQuery = true, value = "INSERT INTO useres_accesses(user_id, access_id) VALUES (?1, (SELECT id FROM accesses WHERE description = ?2 LIMIT 1))")
+	@Query(nativeQuery = true, value = "INSERT INTO users_accesses(user_id, access_id) VALUES (?1, (SELECT id FROM accesses WHERE description = ?2 LIMIT 1))")
 	void insertUserAccess(Long userId, String access);
 }

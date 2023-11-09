@@ -55,7 +55,7 @@ public class User implements UserDetails {
 	private Boolean isDeleted = Boolean.FALSE;
 
 	@OneToMany(fetch = FetchType.EAGER)
-	@JoinTable(name = "useres_accesses", 
+	@JoinTable(name = "users_accesses", 
 		uniqueConstraints = @UniqueConstraint(columnNames = { "user_id", "access_id" }, name = "unique_access_user"), 
 		joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id", 
 		table = "user", unique = false, 
