@@ -23,7 +23,6 @@ import br.com.amaral.model.Image;
 import br.com.amaral.repository.IMemeRepository;
 import br.com.amaral.service.ImageService;
 
-
 @RestController
 public class MemeController {
 
@@ -83,8 +82,8 @@ public class MemeController {
 		return new ResponseEntity<>("OK: Deletion completed successfully.", HttpStatus.OK);
 	}
 	
-	@GetMapping(value = "/meme-of-the-day")
-    public ResponseEntity<Meme> memeOfTheDay() throws ExceptionProject {
+	@GetMapping(value = "**/get-meme-of-the-day")
+    public ResponseEntity<Meme> getMemeOfTheDay() throws ExceptionProject {
 		
         List<Meme> allMemes = memeRepository.findAll();
         
@@ -102,7 +101,7 @@ public class MemeController {
 
 	@ResponseBody
 	@GetMapping(value = "**/get-meme/{id}")
-	public ResponseEntity<Meme> getmeme(@PathVariable("id") Long id) throws ExceptionProject {
+	public ResponseEntity<Meme> getMeme(@PathVariable("id") Long id) throws ExceptionProject {
 
 		Meme meme = memeRepository.findById(id).orElse(null);
 		if (meme == null) {

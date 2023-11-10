@@ -8,7 +8,7 @@
 
 4. Memes precisam necessariamente ter uma categoria - ok
 
-5. Funcionalidade de "Meme do dia" (um meme da base é retornado randomicamente)
+5. Funcionalidade de "Meme do dia" (um meme da base é retornado randomicamente) - ok
 
 6. Melhorar a parte de observabilidade (Logs, métricas, etc)
 
