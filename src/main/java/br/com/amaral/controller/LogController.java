@@ -22,20 +22,20 @@ public class LogController<T> {
 
     @Autowired
     private LogService logService;
-    
+
     private ImplementationUserDetailsService security;
 
-    private final Class<T> entityClass;
+    @Autowired
+    private Class<T> entityClass;
 
     public LogController(Class<T> entityClass) {
         this.entityClass = entityClass;
     }
-    
+
     @ResponseBody
-	@PostMapping(value = "**/log")
+    @PostMapping(value = "/log")
     public ResponseEntity<String> logEntity(@RequestBody T entity) {
-    	
-    	String userId = security.getCurrentUserId();
+        String userId = security.getCurrentUserId();
         long timestamp = System.currentTimeMillis();
 
         LOGGER.log(Level.INFO, "Received request to log {0}. User ID: {1}, Timestamp: {2}, Request: {3}",
@@ -45,12 +45,11 @@ public class LogController<T> {
 
         return new ResponseEntity<>(entityClass.getSimpleName() + " logged successfully", HttpStatus.OK);
     }
-    
+
     @ResponseBody
-	@PostMapping(value = "**/log-list")
+    @PostMapping(value = "/log-list")
     public ResponseEntity<String> logEntityList(@RequestBody List<T> entityList) {
-    	
-    	String userId = security.getCurrentUserId();
+        String userId = security.getCurrentUserId();
         long timestamp = System.currentTimeMillis();
 
         LOGGER.log(Level.INFO, "Received request to log {0} list. User ID: {1}, Timestamp: {2}, Request: {3}",

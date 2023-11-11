@@ -22,6 +22,8 @@ import br.com.amaral.model.Meme;
 import br.com.amaral.model.Image;
 import br.com.amaral.repository.IMemeRepository;
 import br.com.amaral.service.ImageService;
+import io.micrometer.core.annotation.Counted;
+import io.micrometer.core.annotation.Timed;
 
 @RestController
 public class MemeController {
@@ -35,6 +37,8 @@ public class MemeController {
 	@Autowired
     private LogController<Meme> logController;
 
+	@Counted(value = "memeController.createMemeAccessCount", description = "Count of accesses to createMeme endpoint")
+	@Timed(value = "createMeme", description = "Time taken to create a meme")
 	@ResponseBody
 	@PostMapping(value = "**/create-meme")
 	public ResponseEntity<Meme> createMeme(@RequestBody @Valid Meme meme)
@@ -60,6 +64,8 @@ public class MemeController {
 		return new ResponseEntity<>(meme, HttpStatus.OK);
 	}
 	
+	@Counted(value = "memeController.deleteMemeAccessCount", description = "Count of accesses to deleteMeme endpoint")
+	@Timed(value = "deleteMeme", description = "Time taken to delete a meme")
 	@ResponseBody
 	@PostMapping(value = "**/delete-meme")
 	public ResponseEntity<String> deleteMeme(@RequestBody Meme meme) {
@@ -77,6 +83,8 @@ public class MemeController {
 		return new ResponseEntity<>("OK: Deletion completed successfully.", HttpStatus.OK);
 	}
 
+	@Counted(value = "memeController.deleteMemeByIdAccessCount", description = "Count of accesses to deleteMemeById endpoint")
+	@Timed(value = "deleteMemeById", description = "Time taken to delete a meme by ID")
 	@ResponseBody
 	@DeleteMapping(value = "**/delete-meme-by-id/{id}")
 	public ResponseEntity<String> deleteMemeById(@PathVariable("id") Long id) throws ExceptionProject {
@@ -94,6 +102,9 @@ public class MemeController {
 		return new ResponseEntity<>("OK: Deletion completed successfully.", HttpStatus.OK);
 	}
 	
+	@Counted(value = "memeController.getMemeOfTheDayAccessCount", description = "Count of accesses to getMemeOfTheDay endpoint")
+	@Timed(value = "getMemeOfTheDay", description = "Time taken to get the meme of the day")
+	@ResponseBody
 	@GetMapping(value = "**/get-meme-of-the-day")
     public ResponseEntity<Meme> getMemeOfTheDay() throws ExceptionProject {
 		
@@ -113,6 +124,8 @@ public class MemeController {
         return new ResponseEntity<>(randomMeme, HttpStatus.OK);
     }
 
+	@Counted(value = "memeController.getMemeAccessCount", description = "Count of accesses to getMeme endpoint")
+	@Timed(value = "getMeme", description = "Time taken to get a specific meme")
 	@ResponseBody
 	@GetMapping(value = "**/get-meme/{id}")
 	public ResponseEntity<Meme> getMeme(@PathVariable("id") Long id) throws ExceptionProject {
@@ -127,6 +140,8 @@ public class MemeController {
 		return new ResponseEntity<>(meme, HttpStatus.OK);
 	}
 	
+	@Counted(value = "memeController.findAllMemeAccessCount", description = "Count of accesses to findAllMeme endpoint")
+	@Timed(value = "findAllMeme", description = "Time taken to find all memes")
 	@ResponseBody
 	@GetMapping(value = "**/find-all-meme")
 	public ResponseEntity<List<Meme>> findAllMeme() {
@@ -138,6 +153,8 @@ public class MemeController {
 		return new ResponseEntity<>(list, HttpStatus.OK);
 	}
 
+	@Counted(value = "memeController.findMemeByNameAccessCount", description = "Count of accesses to findMemeByName endpoint")
+	@Timed(value = "findMemeByName", description = "Time taken to find memes by name")
 	@ResponseBody
 	@GetMapping(value = "**/find-meme-by-name/{name}")
 	public ResponseEntity<List<Meme>> findMemeByName(@PathVariable("name") String name) {

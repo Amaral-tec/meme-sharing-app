@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 import br.com.amaral.ExceptionProject;
 import br.com.amaral.model.User;
 import br.com.amaral.repository.IUserRepository;
+import io.micrometer.core.annotation.Timed;
 
 @RestController
 public class UserController {
@@ -27,6 +28,10 @@ public class UserController {
 	@Autowired
 	private IUserRepository userRepository;
 	
+	@Autowired
+    private LogController<User> logController;
+	
+	@Timed(value = "createUser", description = "Time taken to create a user")
 	@ResponseBody
 	@PostMapping(value = "**/create-user")
 	public ResponseEntity<User> createUser(@RequestBody @Valid User user) throws ExceptionProject {
@@ -41,9 +46,13 @@ public class UserController {
 		user.setPassword(encryptedPassword);
 		user.setPasswordCreatedAt(new Date());
 		userRepository.save(user);
+		
+		logController.logEntity(user);
+		
 		return new ResponseEntity<>(user, HttpStatus.OK);
 	}
 	
+	@Timed(value = "deleteUser", description = "Time taken to delete a user")
 	@ResponseBody
 	@PostMapping(value = "**/delete-user")
 	public ResponseEntity<String> deleteUser(@RequestBody User user) {
@@ -54,9 +63,13 @@ public class UserController {
 		
 		user.setIsDeleted(true);
 		userRepository.save(user);
+		
+		logController.logEntity(user);
+		
 		return new ResponseEntity<>("OK: Deletion completed successfully.", HttpStatus.OK);
 	}
 	
+	@Timed(value = "deleteUserById", description = "Time taken to delete a user by ID")
 	@ResponseBody
 	@DeleteMapping(value = "**/delete-user-by-id/{id}")
 	public ResponseEntity<String> deleteUserById(@PathVariable("id") Long id) throws ExceptionProject {
@@ -68,9 +81,13 @@ public class UserController {
 		
 		user.setIsDeleted(true);
 		userRepository.save(user);
+		
+		logController.logEntity(user);
+		
 		return new ResponseEntity<>("OK: Deletion completed successfully.", HttpStatus.OK);
 	}
 	
+	@Timed(value = "getUser", description = "Time taken to get a specific user")
 	@ResponseBody
 	@GetMapping(value = "**/get-user/{id}")
 	public ResponseEntity<User> getUser(@PathVariable("id") Long id) throws ExceptionProject {
@@ -80,25 +97,33 @@ public class UserController {
 			throw new ExceptionProject("Operation not performed: Not included in the ID database " + id);
 		}
 
+		logController.logEntity(user);
+		
 		return new ResponseEntity<>(user, HttpStatus.OK);
 	}
 	
-	@ResponseBody
-	@GetMapping(value = "**/get-user-by-login/{login}")
-	public ResponseEntity<User> getUserByLogin(@PathVariable("login") String login) {
-
-		User user = userRepository.getUserByLogin(login);
-
-		return new ResponseEntity<>(user, HttpStatus.OK);
-	}
-	
+	@Timed(value = "findAllUsers", description = "Time taken to find all users")
 	@ResponseBody
 	@GetMapping(value = "**/find-all-users")
 	public ResponseEntity<List<User>> findAllUsers() {
 
 		List<User> list = userRepository.findAll();
 
+		logController.logEntityList(list);
+		
 		return new ResponseEntity<>(list, HttpStatus.OK);
+	}
+	
+	@Timed(value = "getUserByLogin", description = "Time taken to find users by login")
+	@ResponseBody
+	@GetMapping(value = "**/get-user-by-login/{login}")
+	public ResponseEntity<User> getUserByLogin(@PathVariable("login") String login) {
+
+		User user = userRepository.getUserByLogin(login);
+
+		logController.logEntity(user);
+		
+		return new ResponseEntity<>(user, HttpStatus.OK);
 	}
 
 }
