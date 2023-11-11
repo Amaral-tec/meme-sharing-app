@@ -31,6 +31,9 @@ public class MemeController {
 	
 	@Autowired
 	private ImageService imageService;
+	
+	@Autowired
+    private LogController<Meme> logController;
 
 	@ResponseBody
 	@PostMapping(value = "**/create-meme")
@@ -51,9 +54,12 @@ public class MemeController {
 		}
 
 		memeRepository.save(meme);
+		
+		logController.logEntity(meme);
 
 		return new ResponseEntity<>(meme, HttpStatus.OK);
 	}
+	
 	@ResponseBody
 	@PostMapping(value = "**/delete-meme")
 	public ResponseEntity<String> deleteMeme(@RequestBody Meme meme) {
@@ -65,6 +71,9 @@ public class MemeController {
 
 		meme.setIsDeleted(true);
 		memeRepository.save(meme);
+		
+		logController.logEntity(meme);
+		
 		return new ResponseEntity<>("OK: Deletion completed successfully.", HttpStatus.OK);
 	}
 
@@ -79,6 +88,9 @@ public class MemeController {
 
 		meme.setIsDeleted(true);
 		memeRepository.save(meme);
+		
+		logController.logEntity(meme);
+		
 		return new ResponseEntity<>("OK: Deletion completed successfully.", HttpStatus.OK);
 	}
 	
@@ -96,6 +108,8 @@ public class MemeController {
         
         Meme randomMeme = allMemes.get(randomIndex);
         
+        logController.logEntity(randomMeme);
+        
         return new ResponseEntity<>(randomMeme, HttpStatus.OK);
     }
 
@@ -108,6 +122,8 @@ public class MemeController {
 			throw new ExceptionProject("Operation not performed: Not included in the ID database " + id);
 		}
 
+		logController.logEntity(meme);
+		
 		return new ResponseEntity<>(meme, HttpStatus.OK);
 	}
 	
@@ -117,6 +133,8 @@ public class MemeController {
 
 		List<Meme> list = memeRepository.findAll();
 
+		logController.logEntityList(list);
+		
 		return new ResponseEntity<>(list, HttpStatus.OK);
 	}
 
@@ -126,6 +144,8 @@ public class MemeController {
 
 		List<Meme> list = memeRepository.findMemeByName(name.toUpperCase());
 
+		logController.logEntityList(list);
+		
 		return new ResponseEntity<>(list, HttpStatus.OK);
 	}
 }
